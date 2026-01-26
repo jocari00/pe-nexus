@@ -1,0 +1,29 @@
+{
+    "title": "PE-Nexus: Full-Lifecycle Private Equity Deal Orchestrator",
+    "description": "PE-Nexus is a multi-agent autonomous system for private equity deal management, spanning from sourcing through exit. It provides deal pipeline management, document processing, AI-powered financial extraction with full source traceability, and specialized AI agents for each stage of the deal lifecycle.",
+    "upload_type": "software",
+    "license": "MIT",
+    "access_right": "open",
+    "creators": [
+        {
+            "name": "Jordi"
+        }
+    ],
+    "keywords": [
+        "private equity",
+        "deal management",
+        "multi-agent system",
+        "financial extraction",
+        "document processing",
+        "AI agents",
+        "Python",
+        "FastAPI"
+    ],
+    "related_identifiers": [
+        {
+            "identifier": "https://github.com/jordi/pe-nexus",
+            "relation": "isSupplementTo",
+            "scheme": "url"
+        }
+    ]
+}

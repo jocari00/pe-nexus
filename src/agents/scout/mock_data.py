@@ -1,0 +1,626 @@
+"""Mock data for IntelligenceScout agent when API keys are not configured.
+
+Provides realistic sample data for demos and testing without requiring
+external API access.
+"""
+
+from datetime import datetime, timedelta, timezone
+from decimal import Decimal
+from uuid import uuid4
+
+from .sources import (
+    JobSignal,
+    MacroContext,
+    MacroIndicator,
+    NewsSignal,
+    SignalStrength,
+    SignalType,
+    SourceReference,
+)
+
+# Generate timestamps relative to now
+_now = datetime.now(timezone.utc)
+
+
+def _days_ago(days: int) -> datetime:
+    return _now - timedelta(days=days)
+
+
+# Mock News Signals - Realistic PE-relevant news
+MOCK_NEWS_SIGNALS: list[NewsSignal] = [
+    # CloudSync Technologies - Default example in UI
+    NewsSignal(
+        company_name="CloudSync Technologies",
+        headline="CloudSync Technologies Attracts Private Equity Interest",
+        summary="Enterprise cloud synchronization leader CloudSync Technologies has received "
+        "inbound interest from multiple PE firms, sources say. The company's $125M ARR "
+        "and 40% YoY growth make it an attractive target.",
+        signal_type=SignalType.PE_INTEREST,
+        signal_strength=SignalStrength.CRITICAL,
+        sentiment_score=0.8,
+        published_at=_days_ago(1),
+        source=SourceReference(
+            source_type="news",
+            source_name="PE Wire",
+            url="https://example.com/news/cloudsync-pe-interest",
+        ),
+        keywords=["private equity", "acquisition", "cloud", "SaaS"],
+        relevance_score=0.95,
+    ),
+    NewsSignal(
+        company_name="CloudSync Technologies",
+        headline="CloudSync Expands Enterprise Customer Base by 60%",
+        summary="CloudSync Technologies announced a 60% increase in enterprise customers, "
+        "adding Fortune 500 clients including major financial institutions and healthcare providers.",
+        signal_type=SignalType.EXPANSION,
+        signal_strength=SignalStrength.STRONG,
+        sentiment_score=0.85,
+        published_at=_days_ago(3),
+        source=SourceReference(
+            source_type="news",
+            source_name="TechCrunch",
+            url="https://example.com/news/cloudsync-expansion",
+        ),
+        keywords=["growth", "enterprise", "expansion", "customers"],
+        relevance_score=0.8,
+    ),
+    NewsSignal(
+        company_name="CloudSync Technologies",
+        headline="CloudSync CEO: 'We're Evaluating Strategic Options'",
+        summary="In an interview with Bloomberg, CloudSync CEO Sarah Chen indicated the company "
+        "is evaluating strategic options including potential partnerships or a sale process.",
+        signal_type=SignalType.STRATEGIC_REVIEW,
+        signal_strength=SignalStrength.CRITICAL,
+        sentiment_score=0.6,
+        published_at=_days_ago(0),
+        source=SourceReference(
+            source_type="news",
+            source_name="Bloomberg",
+            url="https://example.com/news/cloudsync-strategic",
+        ),
+        keywords=["strategic review", "M&A", "sale process"],
+        relevance_score=0.92,
+    ),
+    NewsSignal(
+        company_name="Acme Manufacturing",
+        headline="Acme Manufacturing Announces European Expansion Plans",
+        summary="Industrial equipment maker Acme Manufacturing disclosed plans to expand "
+        "operations into three new European markets, investing $50M in new facilities.",
+        signal_type=SignalType.EXPANSION,
+        signal_strength=SignalStrength.STRONG,
+        sentiment_score=0.7,
+        published_at=_days_ago(2),
+        source=SourceReference(
+            source_type="news",
+            source_name="Reuters",
+            url="https://example.com/news/acme-expansion",
+        ),
+        keywords=["expansion", "growth", "investment"],
+        relevance_score=0.6,
+    ),
+    NewsSignal(
+        company_name="TechFlow Solutions",
+        headline="TechFlow Solutions Exploring Strategic Alternatives",
+        summary="Enterprise software company TechFlow Solutions has engaged advisors to "
+        "explore strategic alternatives including a potential sale, according to sources.",
+        signal_type=SignalType.STRATEGIC_REVIEW,
+        signal_strength=SignalStrength.CRITICAL,
+        sentiment_score=0.1,
+        published_at=_days_ago(1),
+        source=SourceReference(
+            source_type="news",
+            source_name="WSJ",
+            url="https://example.com/news/techflow-strategic",
+        ),
+        keywords=["strategic review", "sale process", "private equity"],
+        relevance_score=0.95,
+    ),
+    NewsSignal(
+        company_name="HealthFirst Services",
+        headline="HealthFirst Services Reports Record Revenue Growth",
+        summary="Healthcare services provider HealthFirst reported 35% year-over-year "
+        "revenue growth, driven by expansion of telehealth offerings.",
+        signal_type=SignalType.EARNINGS,
+        signal_strength=SignalStrength.MODERATE,
+        sentiment_score=0.8,
+        published_at=_days_ago(3),
+        source=SourceReference(
+            source_type="news",
+            source_name="Bloomberg",
+            url="https://example.com/news/healthfirst-earnings",
+        ),
+        keywords=["growth", "revenue", "expansion"],
+        relevance_score=0.5,
+    ),
+    NewsSignal(
+        company_name="DataCore Systems",
+        headline="DataCore Systems Announces CEO Departure Amid Restructuring",
+        summary="Data analytics firm DataCore Systems announced CEO John Smith will step "
+        "down as the company undertakes a strategic restructuring initiative.",
+        signal_type=SignalType.LEADERSHIP_CHANGE,
+        signal_strength=SignalStrength.STRONG,
+        sentiment_score=-0.4,
+        published_at=_days_ago(1),
+        source=SourceReference(
+            source_type="news",
+            source_name="TechCrunch",
+            url="https://example.com/news/datacore-ceo",
+        ),
+        keywords=["leadership change", "restructuring", "ceo departure"],
+        relevance_score=0.75,
+    ),
+    NewsSignal(
+        company_name="GreenLeaf Foods",
+        headline="Private Equity Firms Circle GreenLeaf Foods",
+        summary="Multiple private equity firms have expressed interest in acquiring "
+        "organic food producer GreenLeaf Foods, sources familiar with the matter said.",
+        signal_type=SignalType.PE_INTEREST,
+        signal_strength=SignalStrength.CRITICAL,
+        sentiment_score=0.5,
+        published_at=_days_ago(0),
+        source=SourceReference(
+            source_type="news",
+            source_name="PE Wire",
+            url="https://example.com/news/greenleaf-pe",
+        ),
+        keywords=["private equity", "acquisition", "buyout"],
+        relevance_score=0.98,
+    ),
+    NewsSignal(
+        company_name="CloudBridge Inc",
+        headline="CloudBridge Raises $80M Series C to Fuel Growth",
+        summary="Cloud infrastructure provider CloudBridge closed an $80M Series C round "
+        "led by top-tier VCs, valuing the company at $500M.",
+        signal_type=SignalType.FUNDING,
+        signal_strength=SignalStrength.MODERATE,
+        sentiment_score=0.7,
+        published_at=_days_ago(4),
+        source=SourceReference(
+            source_type="news",
+            source_name="VentureBeat",
+            url="https://example.com/news/cloudbridge-funding",
+        ),
+        keywords=["funding", "growth", "investment"],
+        relevance_score=0.55,
+    ),
+    NewsSignal(
+        company_name="RetailMax Holdings",
+        headline="RetailMax Announces 500 Store Closures, Layoffs",
+        summary="Retail chain RetailMax will close 500 underperforming stores and lay off "
+        "3,000 employees as part of a turnaround plan.",
+        signal_type=SignalType.RESTRUCTURING,
+        signal_strength=SignalStrength.STRONG,
+        sentiment_score=-0.7,
+        published_at=_days_ago(2),
+        source=SourceReference(
+            source_type="news",
+            source_name="CNBC",
+            url="https://example.com/news/retailmax-closures",
+        ),
+        keywords=["layoff", "restructuring", "cost cutting"],
+        relevance_score=0.6,
+    ),
+    NewsSignal(
+        company_name="MedDevice Corp",
+        headline="MedDevice Corp Receives FDA Approval for Flagship Product",
+        summary="Medical device maker MedDevice received FDA approval for its innovative "
+        "cardiac monitoring system, opening a $2B addressable market.",
+        signal_type=SignalType.NEW_PRODUCT,
+        signal_strength=SignalStrength.STRONG,
+        sentiment_score=0.85,
+        published_at=_days_ago(1),
+        source=SourceReference(
+            source_type="news",
+            source_name="MedTech Today",
+            url="https://example.com/news/meddevice-fda",
+        ),
+        keywords=["new product", "growth", "opportunity"],
+        relevance_score=0.65,
+    ),
+    NewsSignal(
+        company_name="LogiTrans Global",
+        headline="LogiTrans Global Partners with Amazon for Last-Mile Delivery",
+        summary="Logistics provider LogiTrans signed a multi-year partnership with Amazon "
+        "to handle last-mile delivery in 15 metropolitan areas.",
+        signal_type=SignalType.PARTNERSHIP,
+        signal_strength=SignalStrength.STRONG,
+        sentiment_score=0.75,
+        published_at=_days_ago(3),
+        source=SourceReference(
+            source_type="news",
+            source_name="Supply Chain Digest",
+            url="https://example.com/news/logitrans-amazon",
+        ),
+        keywords=["partnership", "growth", "expansion"],
+        relevance_score=0.5,
+    ),
+    NewsSignal(
+        company_name="CyberShield Security",
+        headline="CyberShield Security Weighing IPO or Strategic Sale",
+        summary="Cybersecurity firm CyberShield is exploring options including an IPO or "
+        "sale to a strategic buyer, according to people familiar with the matter.",
+        signal_type=SignalType.IPO_CONSIDERATION,
+        signal_strength=SignalStrength.CRITICAL,
+        sentiment_score=0.4,
+        published_at=_days_ago(0),
+        source=SourceReference(
+            source_type="news",
+            source_name="The Information",
+            url="https://example.com/news/cybershield-ipo",
+        ),
+        keywords=["ipo", "sale process", "strategic review"],
+        relevance_score=0.9,
+    ),
+]
+
+# Mock Job Signals - Hiring patterns that indicate company health
+MOCK_JOB_SIGNALS: list[JobSignal] = [
+    # CloudSync Technologies - Default example in UI
+    JobSignal(
+        company_name="CloudSync Technologies",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.STRONG,
+        job_title="Chief Financial Officer",
+        department="Finance",
+        location="San Francisco, CA",
+        posting_count=1,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="CloudSync Technologies",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.STRONG,
+        job_title="VP of Sales",
+        department="Sales",
+        location="New York, NY",
+        posting_count=1,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="CloudSync Technologies",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.MODERATE,
+        job_title="Senior Cloud Engineer",
+        department="Engineering",
+        location="Remote",
+        posting_count=18,
+        is_leadership=False,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="CloudSync Technologies",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.MODERATE,
+        job_title="Enterprise Account Executive",
+        department="Sales",
+        location="Multiple Locations",
+        posting_count=12,
+        is_leadership=False,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="Acme Manufacturing",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.MODERATE,
+        job_title="VP of Operations",
+        department="Operations",
+        location="Chicago, IL",
+        posting_count=1,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="Acme Manufacturing",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.WEAK,
+        job_title="Manufacturing Engineer",
+        department="Engineering",
+        location="Chicago, IL",
+        posting_count=5,
+        is_leadership=False,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="TechFlow Solutions",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.MODERATE,
+        job_title="Chief Revenue Officer",
+        department="Sales",
+        location="San Francisco, CA",
+        posting_count=1,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="TechFlow Solutions",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.MODERATE,
+        job_title="Senior Software Engineer",
+        department="Engineering",
+        location="Remote",
+        posting_count=12,
+        is_leadership=False,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="HealthFirst Services",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.STRONG,
+        job_title="Regional Director",
+        department="Operations",
+        location="Multiple Locations",
+        posting_count=8,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="Indeed"),
+    ),
+    JobSignal(
+        company_name="HealthFirst Services",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.MODERATE,
+        job_title="Registered Nurse",
+        department="Clinical",
+        location="Multiple Locations",
+        posting_count=45,
+        is_leadership=False,
+        source=SourceReference(source_type="job_board", source_name="Indeed"),
+    ),
+    JobSignal(
+        company_name="DataCore Systems",
+        signal_type=SignalType.LEADERSHIP_CHANGE,
+        signal_strength=SignalStrength.CRITICAL,
+        job_title="Chief Executive Officer",
+        department="Executive",
+        location="Boston, MA",
+        posting_count=1,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="GreenLeaf Foods",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.WEAK,
+        job_title="Production Manager",
+        department="Manufacturing",
+        location="Portland, OR",
+        posting_count=3,
+        is_leadership=False,
+        source=SourceReference(source_type="job_board", source_name="Indeed"),
+    ),
+    JobSignal(
+        company_name="CloudBridge Inc",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.STRONG,
+        job_title="VP of Engineering",
+        department="Engineering",
+        location="Seattle, WA",
+        posting_count=1,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="CloudBridge Inc",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.STRONG,
+        job_title="Cloud Engineer",
+        department="Engineering",
+        location="Remote",
+        posting_count=25,
+        is_leadership=False,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="RetailMax Holdings",
+        signal_type=SignalType.LAYOFFS,
+        signal_strength=SignalStrength.CRITICAL,
+        job_title="Store Manager",
+        department="Retail Operations",
+        location="Nationwide",
+        posting_count=-500,  # Negative indicates layoffs
+        is_leadership=False,
+        source=SourceReference(source_type="news", source_name="Company Announcement"),
+    ),
+    JobSignal(
+        company_name="MedDevice Corp",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.STRONG,
+        job_title="Director of Regulatory Affairs",
+        department="Regulatory",
+        location="Minneapolis, MN",
+        posting_count=1,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+    JobSignal(
+        company_name="CyberShield Security",
+        signal_type=SignalType.HIRING,
+        signal_strength=SignalStrength.STRONG,
+        job_title="CFO",
+        department="Finance",
+        location="Austin, TX",
+        posting_count=1,
+        is_leadership=True,
+        source=SourceReference(source_type="job_board", source_name="LinkedIn"),
+    ),
+]
+
+# Mock Macro Context - Current economic environment
+MOCK_MACRO_CONTEXT = MacroContext(
+    gdp_growth=2.3,
+    interest_rate=5.25,
+    unemployment_rate=3.8,
+    inflation_rate=3.1,
+    vix_index=18.5,
+    market_sentiment="neutral",
+    sector_indicators={
+        "technology": 0.75,  # Strong
+        "healthcare": 0.65,  # Moderate
+        "manufacturing": 0.45,  # Neutral
+        "retail": 0.25,  # Weak
+        "financial_services": 0.55,  # Moderate
+        "energy": 0.60,  # Moderate
+    },
+    indicators=[
+        MacroIndicator(
+            indicator_id="GDP",
+            name="Gross Domestic Product",
+            value=Decimal("27.36"),
+            previous_value=Decimal("26.74"),
+            change_percent=2.3,
+            observation_date=_days_ago(30),
+            frequency="quarterly",
+            source=SourceReference(
+                source_type="fred",
+                source_name="FRED",
+                url="https://fred.stlouisfed.org/series/GDP",
+            ),
+        ),
+        MacroIndicator(
+            indicator_id="FEDFUNDS",
+            name="Federal Funds Rate",
+            value=Decimal("5.25"),
+            previous_value=Decimal("5.25"),
+            change_percent=0.0,
+            observation_date=_days_ago(1),
+            frequency="daily",
+            source=SourceReference(
+                source_type="fred",
+                source_name="FRED",
+                url="https://fred.stlouisfed.org/series/FEDFUNDS",
+            ),
+        ),
+        MacroIndicator(
+            indicator_id="UNRATE",
+            name="Unemployment Rate",
+            value=Decimal("3.8"),
+            previous_value=Decimal("3.9"),
+            change_percent=-2.6,
+            observation_date=_days_ago(7),
+            frequency="monthly",
+            source=SourceReference(
+                source_type="fred",
+                source_name="FRED",
+                url="https://fred.stlouisfed.org/series/UNRATE",
+            ),
+        ),
+        MacroIndicator(
+            indicator_id="VIXCLS",
+            name="VIX Volatility Index",
+            value=Decimal("18.5"),
+            previous_value=Decimal("19.2"),
+            change_percent=-3.6,
+            observation_date=_days_ago(0),
+            frequency="daily",
+            source=SourceReference(
+                source_type="fred",
+                source_name="FRED",
+                url="https://fred.stlouisfed.org/series/VIXCLS",
+            ),
+        ),
+    ],
+)
+
+# Sample company profiles for testing
+MOCK_COMPANIES = [
+    # CloudSync Technologies - Default example in UI
+    {
+        "name": "CloudSync Technologies",
+        "industry": "Technology",
+        "sub_sector": "Enterprise Software",
+        "headquarters": "San Francisco, CA",
+        "employee_count": 380,
+        "revenue_estimate": 125_000_000,
+        "description": "Leading enterprise cloud synchronization and data integration platform.",
+    },
+    {
+        "name": "Acme Manufacturing",
+        "industry": "Industrial Manufacturing",
+        "sub_sector": "Industrial Equipment",
+        "headquarters": "Chicago, IL",
+        "employee_count": 1500,
+        "revenue_estimate": 250_000_000,
+        "description": "Leading manufacturer of industrial equipment and machinery.",
+    },
+    {
+        "name": "TechFlow Solutions",
+        "industry": "Technology",
+        "sub_sector": "Enterprise Software",
+        "headquarters": "San Francisco, CA",
+        "employee_count": 450,
+        "revenue_estimate": 85_000_000,
+        "description": "Enterprise workflow automation and process optimization software.",
+    },
+    {
+        "name": "HealthFirst Services",
+        "industry": "Healthcare",
+        "sub_sector": "Healthcare Services",
+        "headquarters": "Nashville, TN",
+        "employee_count": 2200,
+        "revenue_estimate": 320_000_000,
+        "description": "Multi-specialty healthcare services and telehealth provider.",
+    },
+    {
+        "name": "GreenLeaf Foods",
+        "industry": "Consumer",
+        "sub_sector": "Food & Beverage",
+        "headquarters": "Portland, OR",
+        "employee_count": 800,
+        "revenue_estimate": 150_000_000,
+        "description": "Organic and sustainable food products manufacturer.",
+    },
+    {
+        "name": "DataCore Systems",
+        "industry": "Technology",
+        "sub_sector": "Data Analytics",
+        "headquarters": "Boston, MA",
+        "employee_count": 320,
+        "revenue_estimate": 55_000_000,
+        "description": "Enterprise data analytics and business intelligence platform.",
+    },
+    {
+        "name": "CloudBridge Inc",
+        "industry": "Technology",
+        "sub_sector": "Cloud Infrastructure",
+        "headquarters": "Seattle, WA",
+        "employee_count": 280,
+        "revenue_estimate": 45_000_000,
+        "description": "Cloud infrastructure automation and DevOps tooling.",
+    },
+    {
+        "name": "MedDevice Corp",
+        "industry": "Healthcare",
+        "sub_sector": "Medical Devices",
+        "headquarters": "Minneapolis, MN",
+        "employee_count": 650,
+        "revenue_estimate": 120_000_000,
+        "description": "Innovative medical devices for cardiac monitoring and diagnostics.",
+    },
+    {
+        "name": "CyberShield Security",
+        "industry": "Technology",
+        "sub_sector": "Cybersecurity",
+        "headquarters": "Austin, TX",
+        "employee_count": 400,
+        "revenue_estimate": 75_000_000,
+        "description": "Enterprise cybersecurity solutions and managed security services.",
+    },
+    {
+        "name": "LogiTrans Global",
+        "industry": "Industrials",
+        "sub_sector": "Logistics",
+        "headquarters": "Atlanta, GA",
+        "employee_count": 3500,
+        "revenue_estimate": 450_000_000,
+        "description": "Third-party logistics and last-mile delivery services.",
+    },
+    {
+        "name": "RetailMax Holdings",
+        "industry": "Retail",
+        "sub_sector": "Department Stores",
+        "headquarters": "Dallas, TX",
+        "employee_count": 12000,
+        "revenue_estimate": 1_800_000_000,
+        "description": "Regional department store chain with focus on apparel and home goods.",
+    },
+]
