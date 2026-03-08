@@ -1,5 +1,10 @@
 # PE-Nexus
 
+### Contributors
+- Jordi Carreras
+- Juli Delgado
+- Bosco Soler
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![FAIR](https://img.shields.io/badge/FAIR-78%25-green.svg)
